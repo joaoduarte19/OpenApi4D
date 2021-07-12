@@ -7,9 +7,6 @@ uses
   System.Generics.Collections;
 
 type
-{$SCOPEDENUMS ON}
-  TParamLocation = (Query, Header, Path, Cookie);
-
   Nullable<T> = record
   private
     FValue: T;

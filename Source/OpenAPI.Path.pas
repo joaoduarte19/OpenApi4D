@@ -246,9 +246,11 @@ type
   /// A unique parameter is defined by a combination of a name and location.
   /// </summary>
   TOpenAPIParameter = class
+  public type
+    TLocation = (Query, Header, Path, Cookie);
   private
     FName: string;
-    FIn: TParamLocation;
+    FIn: TLocation;
     FDescription: Nullable<string>;
     FRequired: Boolean;
     FDeprecated: Nullable<Boolean>;
@@ -272,7 +274,7 @@ type
     /// <summary>
     /// REQUIRED. The location of the parameter. Possible values are "query", "header", "path" or "cookie".
     /// </summary>
-    property &In: TParamLocation read FIn write FIn;
+    property &In: TLocation read FIn write FIn;
     /// <summary>
     /// A brief description of the parameter. This could contain examples of use. CommonMark syntax MAY be used for rich text representation.
     /// </summary>
