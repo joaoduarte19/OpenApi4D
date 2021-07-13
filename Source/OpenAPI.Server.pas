@@ -16,9 +16,15 @@ type
 
   TOpenAPIServer = class
   private
+    [OpenAPIField('url')]
     FUrl: string;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('variables')]
     FVariables: TServerVariableMap;
+
     function GetVariables: TServerVariableMap;
   public
     constructor Create;
@@ -43,9 +49,15 @@ type
 
   TOpenAPIServerVariable = class
   private
+    [OpenAPIField('enum')]
     FEnum: TList<string>;
+
+    [OpenAPIField('default')]
     FDefault: string;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
     function GetEnum: TList<string>;
   public
     constructor Create;

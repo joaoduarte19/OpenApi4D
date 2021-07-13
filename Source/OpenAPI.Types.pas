@@ -47,6 +47,14 @@ type
     property Ref: Nullable<string> read FRef write FRef;
   end;
 
+  OpenAPIFieldAttribute = class(TCustomAttribute)
+  private
+    FName: string;
+  public
+    constructor Create(const AFieldName: string = '');
+    property Name: string read FName;
+  end;
+
 implementation
 
 uses
@@ -167,6 +175,14 @@ end;
 constructor TOpenAPIObjectMap<T>.Create;
 begin
   inherited Create([doOwnsValues])
+end;
+
+{ OpenAPIFieldAttribute }
+
+constructor OpenAPIFieldAttribute.Create(const AFieldName: string);
+begin
+  inherited Create;
+  FName := AFieldName;
 end;
 
 end.

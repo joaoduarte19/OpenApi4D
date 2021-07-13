@@ -16,16 +16,36 @@ type
   /// </summary>
   TOpenAPIComponents = class
   private
+    [OpenAPIField('schemas')]
     FSchemas: TOpenAPISchemaMap;
+
+    [OpenAPIField('responses')]
     FResponses: TOpenAPIResponseMap;
+
+    [OpenAPIField('parameters')]
     FParameters: TOpenAPIParameterMap;
+
+    [OpenAPIField('examples')]
     FExamples: TOpenAPIExampleMap;
+
+    [OpenAPIField('requestBodies')]
     FRequestBodies: TOpenAPIRequestBodyMap;
+
+    [OpenAPIField('headers')]
     FHeaders: TOpenAPIHeaderMap;
+
+    [OpenAPIField('securitySchemes')]
     FSecuritySchemes: TOpenAPISecurityMap;
+
+    [OpenAPIField('links')]
     FLinks: TOpenAPILinkMap;
+
+// [OpenAPIField('callbacks')]
 // FCallbacks: TOpenAPICallbackMap;
+
+    [OpenAPIField('pathItems')]
     FPathItems: TOpenAPIPathItemMap;
+
 // function GetCallbacks: TOpenAPICallbackMap;
     function GetExamples: TOpenAPIExampleMap;
     function GetHeaders: TOpenAPIHeaderMap;

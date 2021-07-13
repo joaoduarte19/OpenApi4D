@@ -49,19 +49,45 @@ type
   /// </summary>
   TOpenAPIPathItem = class
   private
+    [OpenAPIField('$ref')]
     FRef: Nullable<string>;
+
+    [OpenAPIField('summary')]
     FSummary: Nullable<string>;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('get')]
     FOperationGet: TOpenApiOperation;
+
+    [OpenAPIField('put')]
     FOperationPut: TOpenApiOperation;
+
+    [OpenAPIField('post')]
     FOperationPost: TOpenApiOperation;
+
+    [OpenAPIField('delete')]
     FOperationDelete: TOpenApiOperation;
+
+    [OpenAPIField('options')]
     FOperationOptions: TOpenApiOperation;
+
+    [OpenAPIField('head')]
     FOperationHead: TOpenApiOperation;
+
+    [OpenAPIField('patch')]
     FOperationPatch: TOpenApiOperation;
+
+    [OpenAPIField('trace')]
     FOperationTrace: TOpenApiOperation;
+
+    [OpenAPIField('servers')]
     FServers: TOpenAPIServerList;
+
+    [OpenAPIField('parameters')]
     FParameters: TOpenAPIParameterList;
+
     function GetServers: TOpenAPIServerList;
     function GetParameters: TOpenAPIParameterList;
     function GetOperationDelete: TOpenAPIOperation;
@@ -75,6 +101,11 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+
+    function SetRef(const ARef: Nullable<string>): TOpenAPIPathItem;
+    function SetSummary(const ASummary: Nullable<string>): TOpenAPIPathItem;
+    function SetDescription(const ADescription: Nullable<string>): TOpenAPIPathItem;
+
     /// <summary>
     /// Allows for a referenced definition of this path item. The referenced structure MUST be in the form of a Path Item Object.
     /// In case a Path Item Object field appears both in the defined object and the referenced object, the behavior is undefined.
@@ -138,18 +169,42 @@ type
   /// </summary>
   TOpenAPIOperation = class
   private
+    [OpenAPIField('tags')]
     FTags: TList<string>;
+
+    [OpenAPIField('summary')]
     FSummary: Nullable<string>;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('operationId')]
     FOperationId: string;
+
+    [OpenAPIField('externalDocs')]
     FExternalDocs: TOpenAPIExternalDoc;
+
+    [OpenAPIField('parameters')]
     FParameters: TOpenAPIParameterList;
+
+    [OpenAPIField('requestBody')]
     FRequestBody: TOpenAPIRequestBody;
+
+// [OpenAPIField('callbacks')]
 // FCallbacks: TOpenAPICallbackMap;
+
+    [OpenAPIField('responses')]
     FResponses: TOpenAPIResponseMap;
+
+    [OpenAPIField('deprecated')]
     FDeprecated: Nullable<Boolean>;
+
+    [OpenAPIField('security')]
     FSecurity: TOpenAPISecurityRequirement;
+
+    [OpenAPIField('servers')]
     FServers: TOpenAPIServerList;
+
     function GetParameters: TOpenAPIParameterList;
 // function GetCallbacks: TOpenAPICallbackMap;
     function GetRequestBody: TOpenAPIRequestBody;
@@ -160,10 +215,17 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+
+    function AddTag(const ATag: string): TOpenAPIOperation;
+    function SetSummary(const ASummary: Nullable<string>): TOpenAPIOperation;
+    function SetDescription(const ADescription: Nullable<string>): TOpenAPIOperation;
+    function SetOperationId(const AOperationId: string): TOpenAPIOperation;
+    function SetDeprecated(const ADeprecated: Nullable<Boolean>): TOpenAPIOperation;
+
     /// <summary>
     /// A list of tags for API documentation control. Tags can be used for logical grouping of operations by resources or any other qualifier.
     /// </summary>
-    property Tags: TList<string> read FTags write FTags;
+    property Tags: TList<string> read FTags;
     /// <summary>
     /// A short summary of what the operation does.
     /// </summary>
@@ -228,9 +290,15 @@ type
   /// </summary>
   TOpenAPIExternalDoc = class
   private
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('url')]
     FUrl: string;
   public
+    function SetDescription(const ADescription: Nullable<string>): TOpenAPIExternalDoc;
+    function SetUrl(const AUrl: string): TOpenAPIExternalDoc;
+
     /// <summary>
     /// A description of the target documentation. CommonMark syntax MAY be used for rich text representation.
     /// </summary>
@@ -249,16 +317,36 @@ type
   public type
     TLocation = (Query, Header, Path, Cookie);
   private
+    [OpenAPIField('name')]
     FName: string;
+
+    [OpenAPIField('in')]
     FIn: TLocation;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('required')]
     FRequired: Boolean;
+
+    [OpenAPIField('deprecated')]
     FDeprecated: Nullable<Boolean>;
+
+    [OpenAPIField('style')]
     FStyle: Nullable<string>;
+
+    [OpenAPIField('explode')]
     FExplode: Nullable<Boolean>;
+
+    [OpenAPIField('allowReserved')]
     FAllowReserved: Nullable<Boolean>;
+
+    [OpenAPIField('schema')]
     FSchema: TOpenAPISchema;
+
+    [OpenAPIField('examples')]
     FExamples: TOpenAPIExampleMap;
+
     function GetExamples: TOpenAPIExampleMap;
     function GetSchema: TOpenAPISchema;
   public
@@ -321,8 +409,13 @@ type
   /// </summary>
   TOpenAPIRequestBody = class
   private
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('content')]
     FContent: TOpenAPIMediaTypeMap;
+
+    [OpenAPIField('required')]
     FRequired: Boolean;
   public
     constructor Create;
@@ -352,9 +445,16 @@ type
   /// </summary>
   TOpenAPIResponse = class
   private
+    [OpenAPIField('description')]
     FDescription: string;
+
+    [OpenAPIField('headers')]
     FHeaders: TOpenAPIHeaderMap;
+
+    [OpenAPIField('content')]
     FContent: TOpenAPIMediaTypeMap;
+
+    [OpenAPIField('links')]
     FLinks: TOpenAPILinkMap;
     function GetContent: TOpenAPIMediaTypeMap;
     function GetHeaders: TOpenAPIHeaderMap;
@@ -389,9 +489,15 @@ type
   /// </summary>
   TOpenAPIMediaType = class
   private
+    [OpenAPIField('schema')]
     FSchema: TOpenAPISchema;
+
+    [OpenAPIField('examples')]
     FExamples: TOpenAPIExample;
+
+    [OpenAPIField('encoding')]
     FEncoding: TOpenAPIEncodingMap;
+
     function GetEncoding: TOpenAPIEncodingMap;
     function GetExamples: TOpenAPIExample;
     function GetSchema: TOpenAPISchema;
@@ -420,10 +526,19 @@ type
   /// </summary>
   TOpenAPIEncoding = class
   private
+    [OpenAPIField('contentType')]
     FContentType: string;
+
+    [OpenAPIField('headers')]
     FHeaders: TOpenAPIHeaderMap;
+
+    [OpenAPIField('style')]
     FStyle: Nullable<string>;
+
+    [OpenAPIField('explode')]
     FExplode: Nullable<Boolean>;
+
+    [OpenAPIField('allowReserved')]
     FAllowReserved: Nullable<Boolean>;
   public
     /// <summary>
@@ -465,8 +580,13 @@ type
 
   TOpenAPIExample = class
   private
+    [OpenAPIField('summary')]
     FSummary: Nullable<string>;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('externalValue')]
     FExternalValue: Nullable<string>;
   public
     /// <summary>
@@ -487,13 +607,28 @@ type
 
   TOpenAPIHeader = class
   private
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('required')]
     FRequired: Boolean;
+
+    [OpenAPIField('deprecated')]
     FDeprecated: Nullable<Boolean>;
+
+    [OpenAPIField('style')]
     FStyle: Nullable<string>;
+
+    [OpenAPIField('explode')]
     FExplode: Nullable<Boolean>;
+
+    [OpenAPIField('allowReserved')]
     FAllowReserved: Nullable<Boolean>;
+
+    [OpenAPIField('schema')]
     FSchema: TOpenAPISchema;
+
+    [OpenAPIField('examples')]
     FExamples: TOpenAPIExampleMap;
     function GetExamples: TOpenAPIExampleMap;
     function GetSchema: TOpenAPISchema;
@@ -541,12 +676,24 @@ type
 
   TOpenAPILink = class
   private
-    FOperationId: Nullable<string>;
+    [OpenAPIField('operationRef')]
     FOperationRef: Nullable<string>;
-    FDescription: Nullable<string>;
-    FServer: TOpenAPIServer;
-    FRequestBody: Nullable<string>;
+
+    [OpenAPIField('operationId')]
+    FOperationId: Nullable<string>;
+
+    [OpenAPIField('parameters')]
     FParameters: Nullable<string>;
+
+    [OpenAPIField('requestBody')]
+    FRequestBody: Nullable<string>;
+
+    [OpenAPIField('description')]
+    FDescription: Nullable<string>;
+
+    [OpenAPIField('server')]
+    FServer: TOpenAPIServer;
+
     function GetServer: TOpenAPIServer;
   public
     constructor Create;
@@ -701,11 +848,36 @@ begin
   Result := FServers;
 end;
 
+function TOpenAPIPathItem.SetDescription(const ADescription: Nullable<string>): TOpenAPIPathItem;
+begin
+  Result := Self;
+  FDescription := ADescription;
+end;
+
+function TOpenAPIPathItem.SetRef(const ARef: Nullable<string>): TOpenAPIPathItem;
+begin
+  Result := Self;
+  FRef := ARef;
+end;
+
+function TOpenAPIPathItem.SetSummary(const ASummary: Nullable<string>): TOpenAPIPathItem;
+begin
+  Result := Self;
+  FSummary := ASummary;
+end;
+
 { TOpenAPIOperation }
+
+function TOpenAPIOperation.AddTag(const ATag: string): TOpenAPIOperation;
+begin
+  Result := Self;
+  FTags.Add(ATag);
+end;
 
 constructor TOpenAPIOperation.Create;
 begin
   inherited Create;
+  FTags := TList<string>.Create;
   FExternalDocs := nil;
   FParameters := nil;
   FRequestBody := nil;
@@ -717,6 +889,7 @@ end;
 
 destructor TOpenAPIOperation.Destroy;
 begin
+  FreeAndNil(FTags);
   if Assigned(FExternalDocs) then
     FreeAndNil(FExternalDocs);
   if Assigned(FParameters) then
@@ -780,6 +953,30 @@ begin
   if not Assigned(FServers) then
     FServers := TOpenAPIServerList.Create;
   Result := FServers;
+end;
+
+function TOpenAPIOperation.SetDeprecated(const ADeprecated: Nullable<Boolean>): TOpenAPIOperation;
+begin
+  Result := Self;
+  FDeprecated := ADeprecated;
+end;
+
+function TOpenAPIOperation.SetDescription(const ADescription: Nullable<string>): TOpenAPIOperation;
+begin
+  Result := Self;
+  FDescription := ADescription;
+end;
+
+function TOpenAPIOperation.SetOperationId(const AOperationId: string): TOpenAPIOperation;
+begin
+  Result := Self;
+  FOperationId := AOperationId;
+end;
+
+function TOpenAPIOperation.SetSummary(const ASummary: Nullable<string>): TOpenAPIOperation;
+begin
+  Result := Self;
+  FSummary := ASummary;
 end;
 
 { TOpenAPIRequestBody }
@@ -965,6 +1162,20 @@ begin
   if not Assigned(FServer) then
     FServer := TOpenAPIServer.Create;
   Result := FServer;
+end;
+
+{ TOpenAPIExternalDoc }
+
+function TOpenAPIExternalDoc.SetDescription(const ADescription: Nullable<string>): TOpenAPIExternalDoc;
+begin
+  Result := Self;
+  FDescription := ADescription;
+end;
+
+function TOpenAPIExternalDoc.SetUrl(const AUrl: string): TOpenAPIExternalDoc;
+begin
+  Result := Self;
+  FUrl := AUrl;
 end;
 
 end.

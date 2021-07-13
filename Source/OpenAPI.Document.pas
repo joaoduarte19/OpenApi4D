@@ -20,7 +20,7 @@ type
   /// </summary>
   TOpenAPIDocument = class
   private
-    FOpenAPIInfo: TOpenAPIInfo;
+    FInfo: TOpenAPIInfo;
     FServers: TOpenAPIServerList;
     FPaths: TOpenAPIPathItemMap;
     FComponents: TOpenAPIComponents;
@@ -36,16 +36,19 @@ type
     /// The openapi field SHOULD be used by tooling to interpret the OpenAPI document.
     /// This is not related to the API info.version string.
     /// </summary>
+    [OpenAPIField('openapi')]
     property OpenAPI: string read GetOpenAPI;
     /// <summary>
     /// REQUIRED. Provides metadata about the API. The metadata MAY be used by tooling as required.
     /// </summary>
-    property Info: TOpenAPIInfo read FOpenAPIInfo;
+    [OpenAPIField('info')]
+    property Info: TOpenAPIInfo read FInfo;
     /// <summary>
     /// An array of Server Objects, which provide connectivity information to a target server.
     /// If the servers property is not provided, or is an empty array,
     /// the default value would be a Server Object with a url value of /.
     /// </summary>
+    [OpenAPIField('servers')]
     property Servers: TOpenAPIServerList read FServers;
     /// <summary>
     /// A list of tags used by the document with additional metadata.
@@ -54,18 +57,22 @@ type
     /// The tags that are not declared MAY be organized randomly or based on the tools’ logic.
     /// Each tag name in the list MUST be unique
     /// </summary>
+    [OpenAPIField('tags')]
     property Tags: TOpenAPITagList read FTags;
     /// <summary>
     /// Additional external documentation.
     /// </summary>
+    [OpenAPIField('externalDocs')]
     property ExternalDocs: TOpenAPIExternalDoc read FExternalDocs;
     /// <summary>
     /// The available paths and operations for the API.
     /// </summary>
+    [OpenAPIField('paths')]
     property Paths: TOpenAPIPathItemMap read FPaths;
     /// <summary>
     /// An element to hold various schemas for the document.
     /// </summary>
+    [OpenAPIField('components')]
     property Components: TOpenAPIComponents read FComponents;
     /// <summary>
     /// A declaration of which security mechanisms can be used across the API.
@@ -74,6 +81,7 @@ type
     /// Individual operations can override this definition. To make security optional,
     /// an empty security requirement ({}) can be included in the array.
     /// </summary>
+    [OpenAPIField('security')]
     property Security: TOpenAPISecurityRequirementList read FSecurity;
   end;
 
@@ -83,13 +91,23 @@ type
   /// </summary>
   TOpenAPITag = class
   private
+    [OpenAPIField('name')]
     FName: string;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('externalDocs')]
     FExternalDocs: TOpenAPIExternalDoc;
+
     function GetExternalDocs: TOpenAPIExternalDoc;
   public
     constructor Create;
     destructor Destroy; override;
+
+    function SetName(const AName: string): TOpenAPITag;
+    function SetDescription(const ADescription: Nullable<string>): TOpenAPITag;
+
     /// <summary>
     /// REQUIRED. The name of the tag.
     /// </summary>
@@ -118,7 +136,7 @@ constructor TOpenAPIDocument.Create;
 begin
   inherited Create;
 
-  FOpenAPIInfo := TOpenAPIInfo.Create;
+  FInfo := TOpenAPIInfo.Create;
   FServers := TOpenAPIServerList.Create;
   FPaths := TOpenAPIPathItemMap.Create;
   FComponents := TOpenAPIComponents.Create;
@@ -129,7 +147,7 @@ end;
 
 destructor TOpenAPIDocument.Destroy;
 begin
-  FreeAndNil(FOpenAPIInfo);
+  FreeAndNil(FInfo);
   FreeAndNil(FServers);
   FreeAndNil(FPaths);
   FreeAndNil(FComponents);
@@ -164,6 +182,18 @@ begin
   if not Assigned(FExternalDocs) then
     FExternalDocs := TOpenAPIExternalDoc.Create;
   Result := FExternalDocs;
+end;
+
+function TOpenAPITag.SetDescription(const ADescription: Nullable<string>): TOpenAPITag;
+begin
+  Result := Self;
+  FDescription := ADescription;
+end;
+
+function TOpenAPITag.SetName(const AName: string): TOpenAPITag;
+begin
+  Result := Self;
+  FName := AName;
 end;
 
 end.

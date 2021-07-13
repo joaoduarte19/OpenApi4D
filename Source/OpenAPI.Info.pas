@@ -16,18 +16,39 @@ type
   /// </summary>
   TOpenAPIInfo = class
   private
+    [OpenAPIField('title')]
     FTitle: string;
+
+    [OpenAPIField('summary')]
     FSummary: Nullable<string>;
+
+    [OpenAPIField('description')]
     FDescription: Nullable<string>;
+
+    [OpenAPIField('termsOfService')]
     FTermsOfService: Nullable<string>;
+
+    [OpenAPIField('contact')]
     FContact: TOpenAPIContact;
+
+    [OpenAPIField('license')]
     FLicense: TOpenAPILicense;
+
+    [OpenAPIField('version')]
     FVersion: string;
+
     function GetContact: TOpenAPIContact;
     function GetLicense: TOpenAPILicense;
   public
     constructor Create;
     destructor Destroy; override;
+
+    function SetTitle(const ATitle: string): TOpenAPIInfo;
+    function SetSummary(const ASummary: Nullable<string>): TOpenAPIInfo;
+    function SetDescription(const ADescription: Nullable<string>): TOpenAPIInfo;
+    function SetTermsOfService(const ATermsOfService: Nullable<string>): TOpenAPIInfo;
+    function SetVersion(const AVersion: string): TOpenAPIInfo;
+
     /// <summary>
     /// REQUIRED. The title of the API.
     /// </summary>
@@ -63,10 +84,19 @@ type
   /// </summary>
   TOpenAPIContact = class
   private
+    [OpenAPIField('name')]
     FName: Nullable<string>;
+
+    [OpenAPIField('url')]
     FUrl: Nullable<string>;
+
+    [OpenAPIField('email')]
     FEMail: Nullable<string>;
   public
+    function SetName(const AName: Nullable<string>): TOpenAPIContact;
+    function SetUrl(const AUrl: Nullable<string>): TOpenAPIContact;
+    function SetEmail(const AEmail: Nullable<string>): TOpenAPIContact;
+
     /// <summary>
     /// The identifying name of the contact person/organization.
     /// </summary>
@@ -86,10 +116,19 @@ type
   /// </summary>
   TOpenAPILicense = class
   private
+    [OpenAPIField('name')]
     FName: string;
+
+    [OpenAPIField('identifier')]
     FIdentifier: Nullable<string>;
+
+    [OpenAPIField('url')]
     FUrl: Nullable<string>;
   public
+    function SetName(const AName: string): TOpenAPILicense;
+    function SetIdentifier(const AIdentifier: Nullable<string>): TOpenAPILicense;
+    function SetUrl(const AUrl: Nullable<string>): TOpenAPILicense;
+
     /// <summary>
     /// REQUIRED. The license name used for the API.
     /// </summary>
@@ -141,6 +180,76 @@ begin
     FLicense := TOpenAPILicense.Create;
 
   Result := FLicense;
+end;
+
+function TOpenAPIInfo.SetDescription(const ADescription: Nullable<string>): TOpenAPIInfo;
+begin
+  Result := Self;
+  FDescription := ADescription;
+end;
+
+function TOpenAPIInfo.SetSummary(const ASummary: Nullable<string>): TOpenAPIInfo;
+begin
+  Result := Self;
+  FSummary := ASummary;
+end;
+
+function TOpenAPIInfo.SetTermsOfService(const ATermsOfService: Nullable<string>): TOpenAPIInfo;
+begin
+  Result := Self;
+  FTermsOfService := ATermsOfService;
+end;
+
+function TOpenAPIInfo.SetTitle(const ATitle: string): TOpenAPIInfo;
+begin
+  Result := Self;
+  FTitle := ATitle;
+end;
+
+function TOpenAPIInfo.SetVersion(const AVersion: string): TOpenAPIInfo;
+begin
+  Result := Self;
+  FVersion := AVersion;
+end;
+
+{ TOpenAPIContact }
+
+function TOpenAPIContact.SetEmail(const AEmail: Nullable<string>): TOpenAPIContact;
+begin
+  Result := Self;
+  FEMail := AEmail;
+end;
+
+function TOpenAPIContact.SetName(const AName: Nullable<string>): TOpenAPIContact;
+begin
+  Result := Self;
+  FName := AName;
+end;
+
+function TOpenAPIContact.SetUrl(const AUrl: Nullable<string>): TOpenAPIContact;
+begin
+  Result := Self;
+  FUrl := AUrl;
+end;
+
+{ TOpenAPILicense }
+
+function TOpenAPILicense.SetIdentifier(const AIdentifier: Nullable<string>): TOpenAPILicense;
+begin
+  Result := Self;
+  FIdentifier := AIdentifier;
+end;
+
+function TOpenAPILicense.SetName(const AName: string): TOpenAPILicense;
+begin
+  Result := Self;
+  FName := AName;
+end;
+
+function TOpenAPILicense.SetUrl(const AUrl: Nullable<string>): TOpenAPILicense;
+begin
+  Result := Self;
+  FUrl := AUrl;
 end;
 
 end.
