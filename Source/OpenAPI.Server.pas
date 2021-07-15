@@ -9,10 +9,7 @@ uses
 type
   TOpenAPIServerVariable = class;
 
-  TServerVariableMap = class(TObjectDictionary<string, TOpenAPIServerVariable>)
-  public
-    constructor Create;
-  end;
+  TServerVariableMap = class(TOpenAPIObjectMap<TOpenAPIServerVariable>);
 
   TOpenAPIServer = class
   private
@@ -27,8 +24,13 @@ type
 
     function GetVariables: TServerVariableMap;
   public
-    constructor Create;
+    constructor Create; overload;
+    constructor Create(const AUrl: string; const ADescription: string = ''); overload;
     destructor Destroy; override;
+
+    function SetUrl(const AUrl: string): TOpenAPIServer;
+    function SetDescription(const ADescription: Nullable<string>): TOpenAPIServer;
+
     /// <summary>
     /// REQUIRED. A URL to the target host. This URL supports Server Variables and MAY be relative,
     /// to indicate that the host location is relative to the location where the OpenAPI document is being served.
@@ -62,6 +64,11 @@ type
   public
     constructor Create;
     destructor Destroy; override;
+
+    function AddEnumItem(const AEnum: string): TOpenAPIServerVariable;
+    function SetDefault(const ADefault: string): TOpenAPIServerVariable;
+    function SetDescription(const ADescription: Nullable<string>): TOpenAPIServerVariable;
+
     /// <summary>
     /// An enumeration of string values to be used if the substitution options are from a limited set. The array MUST NOT be empty.
     /// </summary>
@@ -91,6 +98,14 @@ begin
   FVariables := nil;
 end;
 
+constructor TOpenAPIServer.Create(const AUrl, ADescription: string);
+begin
+  Create;
+  FUrl := AUrl;
+  if not ADescription.IsEmpty then
+    FDescription := ADescription;
+end;
+
 destructor TOpenAPIServer.Destroy;
 begin
   if Assigned(FVariables) then
@@ -105,7 +120,25 @@ begin
   Result := FVariables;
 end;
 
+function TOpenAPIServer.SetDescription(const ADescription: Nullable<string>): TOpenAPIServer;
+begin
+  Result := Self;
+  FDescription := ADescription;
+end;
+
+function TOpenAPIServer.SetUrl(const AUrl: string): TOpenAPIServer;
+begin
+  Result := Self;
+  FUrl := AUrl;
+end;
+
 { TOpenAPIServerVariable }
+
+function TOpenAPIServerVariable.AddEnumItem(const AEnum: string): TOpenAPIServerVariable;
+begin
+  Result := Self;
+  FEnum.Add(AEnum);
+end;
 
 constructor TOpenAPIServerVariable.Create;
 begin
@@ -127,11 +160,16 @@ begin
   Result := FEnum;
 end;
 
-{ TServerVariableMap }
-
-constructor TServerVariableMap.Create;
+function TOpenAPIServerVariable.SetDefault(const ADefault: string): TOpenAPIServerVariable;
 begin
-  inherited Create([doOwnsValues]);
+  Result := Self;
+  FDefault := ADefault;
+end;
+
+function TOpenAPIServerVariable.SetDescription(const ADescription: Nullable<string>): TOpenAPIServerVariable;
+begin
+  Result := Self;
+  FDescription := ADescription;
 end;
 
 end.

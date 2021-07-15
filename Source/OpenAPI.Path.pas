@@ -296,6 +296,9 @@ type
     [OpenAPIField('url')]
     FUrl: string;
   public
+    constructor Create; overload;
+    constructor Create(const AUrl: string; const ADescription: string = ''); overload;
+
     function SetDescription(const ADescription: Nullable<string>): TOpenAPIExternalDoc;
     function SetUrl(const AUrl: string): TOpenAPIExternalDoc;
 
@@ -1165,6 +1168,19 @@ begin
 end;
 
 { TOpenAPIExternalDoc }
+
+constructor TOpenAPIExternalDoc.Create(const AUrl, ADescription: string);
+begin
+  Create;
+  FUrl := AUrl;
+  if not ADescription.IsEmpty then
+    FDescription := ADescription;
+end;
+
+constructor TOpenAPIExternalDoc.Create;
+begin
+  inherited Create;
+end;
 
 function TOpenAPIExternalDoc.SetDescription(const ADescription: Nullable<string>): TOpenAPIExternalDoc;
 begin

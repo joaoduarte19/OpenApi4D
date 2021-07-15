@@ -102,11 +102,14 @@ type
 
     function GetExternalDocs: TOpenAPIExternalDoc;
   public
-    constructor Create;
+    constructor Create; overload;
+    constructor Create(const AName: string; const ADescription: string = ''); overload;
+
     destructor Destroy; override;
 
     function SetName(const AName: string): TOpenAPITag;
     function SetDescription(const ADescription: Nullable<string>): TOpenAPITag;
+    function SetExternalDocs(const AUrl: string; const ADescription: string = ''): TOpenAPITag;
 
     /// <summary>
     /// REQUIRED. The name of the tag.
@@ -128,7 +131,7 @@ uses
   System.SysUtils;
 
 const
-  OPEN_API_VERSION = '3.1.0';
+  OPEN_API_VERSION = '3.0.1';
 
 { TOpenAPIDocument }
 
@@ -168,6 +171,22 @@ constructor TOpenAPITag.Create;
 begin
   inherited Create;
   FExternalDocs := nil;
+end;
+
+function TOpenAPITag.SetExternalDocs(const AUrl, ADescription: string): TOpenAPITag;
+begin
+  Result := Self;
+  ExternalDocs.Url := AUrl;
+  if not ADescription.IsEmpty then
+    ExternalDocs.Description := ADescription;
+end;
+
+constructor TOpenAPITag.Create(const AName, ADescription: string);
+begin
+  Create;
+  FName := AName;
+  if not ADescription.IsEmpty then
+    FDescription := ADescription;
 end;
 
 destructor TOpenAPITag.Destroy;

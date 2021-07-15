@@ -38,21 +38,21 @@ type
 
   ENullableException = class(Exception);
 
+  OpenAPIFieldAttribute = class(TCustomAttribute)
+  private
+    FFieldName: string;
+  public
+    constructor Create(const AFieldName: string = '');
+    property FieldName: string read FFieldName;
+  end;
+
   TOpenAPIObjectMap<T: class> = class(TObjectDictionary<string, T>)
   private
+    [OpenAPIField('$ref')]
     FRef: Nullable<string>;
   public
     constructor Create;
-
     property Ref: Nullable<string> read FRef write FRef;
-  end;
-
-  OpenAPIFieldAttribute = class(TCustomAttribute)
-  private
-    FName: string;
-  public
-    constructor Create(const AFieldName: string = '');
-    property Name: string read FName;
   end;
 
 implementation
@@ -182,7 +182,7 @@ end;
 constructor OpenAPIFieldAttribute.Create(const AFieldName: string);
 begin
   inherited Create;
-  FName := AFieldName;
+  FFieldName := AFieldName;
 end;
 
 end.

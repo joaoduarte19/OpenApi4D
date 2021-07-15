@@ -7,39 +7,111 @@ uses
   OpenAPI.Types;
 
 type
+  TOpenAPISchema = class;
+  TOpenAPISchemaMap = class(TOpenAPIObjectMap<TOpenAPISchema>);
 
   TOpenAPISchema = class
   private
+    [OpenAPIField('type')]
+    FType: string;
+
+    [OpenAPIField('format')]
+    FFormat: Nullable<string>;
+
+    [OpenAPIField('pattern')]
+    FPattern: Nullable<string>;
+
+    [OpenAPIField('description')]
+    FDescription: Nullable<string>;
+
+    [OpenAPIField('maxLength')]
+    FMaxLength: Nullable<Integer>;
+
+    [OpenAPIField('minLength')]
+    FMinLength: Nullable<Integer>;
+
+    [OpenAPIField('multipleOf')]
+    FMultipleOf: Nullable<Double>;
+
+    [OpenAPIField('minimum')]
+    FMinimum: Nullable<Double>;
+
+    [OpenAPIField('maximum')]
+    FMaximum: Nullable<Double>;
+
+    [OpenAPIField('exclusiveMinimum')]
+    FExclusiveMinimum: Nullable<Boolean>;
+
+    [OpenAPIField('exclusiveMaximum')]
+    FExclusiveMaximum: Nullable<Boolean>;
+
+    [OpenAPIField('properties')]
+    FProperties: TOpenAPISchemaMap;
+
+    [OpenAPIField('aditionalProperties')]
+    FAditionalProperties: Nullable<Boolean>;
+
+    [OpenAPIField('required')]
+    FRequiredProperties: TList<string>;
+
+    function GetProperties: TOpenAPISchemaMap;
+    function GetRequiredProperties: TList<string>;
   public
     constructor Create;
     destructor Destroy; override;
-  end;
 
-  TOpenAPISchemaMap = class(TObjectDictionary<string, TOpenAPISchema>)
-  public
-    constructor Create;
+    property &Type: string read FType write FType;
+    property Format: Nullable<string> read FFormat write FFormat;
+    property Description: Nullable<string> read FDescription write FDescription;
+    property MinLength: Nullable<Integer> read FMinLength write FMinLength;
+    property MaxLength: Nullable<Integer> read FMaxLength write FMaxLength;
+    property Pattern: Nullable<string> read FPattern write FPattern;
+    property Minimum: Nullable<Double> read FMinimum write FMinimum;
+    property Maximum: Nullable<Double> read FMaximum write FMaximum;
+    property ExclusiveMinimum: Nullable<Boolean> read FExclusiveMinimum write FExclusiveMinimum;
+    property ExclusiveMaximum: Nullable<Boolean> read FExclusiveMaximum write FExclusiveMaximum;
+    property MultipleOf: Nullable<Double> read FMultipleOf write FMultipleOf;
+    property Properties: TOpenAPISchemaMap read GetProperties;
+    property AditionalProperties: Nullable<Boolean> read FAditionalProperties write FAditionalProperties;
+    property RequiredProperties: TList<string> read GetRequiredProperties;
   end;
 
 implementation
+
+uses
+  System.SysUtils;
 
 { TOpenAPISchema }
 
 constructor TOpenAPISchema.Create;
 begin
-
+  inherited Create;
+  FProperties := nil;
+  FRequiredProperties := nil;
 end;
 
 destructor TOpenAPISchema.Destroy;
 begin
+  if Assigned(FProperties) then
+    FreeAndNil(FProperties);
+  if Assigned(FRequiredProperties) then
+    FreeAndNil(FRequiredProperties);
 
-  inherited;
+  inherited Destroy;
 end;
 
-{ TOpenAPISchemaMap }
-
-constructor TOpenAPISchemaMap.Create;
+function TOpenAPISchema.GetProperties: TOpenAPISchemaMap;
 begin
-  inherited Create([doOwnsValues])
+  if not Assigned(FProperties) then
+    FProperties := TOpenAPISchemaMap.Create;
+  Result := FProperties;
+end;
+
+function TOpenAPISchema.GetRequiredProperties: TList<string>;
+begin
+  if not Assigned(FRequiredProperties) then
+    FRequiredProperties := TList<string>.Create;
+  Result := FRequiredProperties;
 end;
 
 end.
