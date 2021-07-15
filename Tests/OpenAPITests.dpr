@@ -20,7 +20,8 @@ uses
   OpenAPI.Components in '..\Source\OpenAPI.Components.pas',
   OpenAPI.Security in '..\Source\OpenAPI.Security.pas',
   OpenAPI.Schema in '..\Source\OpenAPI.Schema.pas',
-  OpenAPI.Path in '..\Source\OpenAPI.Path.pas';
+  OpenAPI.Path in '..\Source\OpenAPI.Path.pas',
+  OpenAPI.Serializer in '..\Source\OpenAPI.Serializer.pas';
 
 {$IFNDEF TESTINSIGHT}
 var
